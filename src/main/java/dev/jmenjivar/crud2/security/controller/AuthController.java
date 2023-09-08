@@ -30,6 +30,7 @@ import dev.jmenjivar.crud2.security.entity.Rol;
 import dev.jmenjivar.crud2.security.entity.Usuario;
 import dev.jmenjivar.crud2.security.enums.RolNombre;
 import dev.jmenjivar.crud2.security.jwt.JwtProvider;
+import dev.jmenjivar.crud2.security.repository.UsuarioRepository;
 import dev.jmenjivar.crud2.security.service.RolService;
 import dev.jmenjivar.crud2.security.service.UsuarioService;
 
@@ -46,6 +47,9 @@ public class AuthController {
 	
 	@Autowired
 	UsuarioService usuarioService;
+	
+	@Autowired
+	UsuarioRepository usuarioRepository;
 	
 	@Autowired
 	RolService rolService;
@@ -76,6 +80,7 @@ public class AuthController {
 	public ResponseEntity<?> login (@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult){
 		if(bindingResult.hasErrors())
 			return new ResponseEntity<Mensaje>(new Mensaje("Usuario invalido"),HttpStatus.UNAUTHORIZED);
+
 		Authentication authentication = 
 				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getNombreUsuario(),loginUsuario.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
